@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/balieirofood?createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: root
+    password: 123456789
+  jpa:
+    generate-ddl: true #Vai gerar as tabela do banco automáticamente
+    hibernate:
+      ddl-auto: create #Aqui toda vez que inicio a aplicação ele deleta as tabelas e cria tudo novamente do zero
+    show-sql: true #Usado para ver os sql gerado quando roda o programa, Não é indicado usar em produção somente para desenvolvimento
