@@ -1,12 +1,12 @@
 package com.balieiro.balieiroFoodapi.api.controller;
 
 import com.balieiro.balieiroFoodapi.domain.entity.Restaurante;
+import com.balieiro.balieiroFoodapi.domain.exception.EntidadeNaoEncontradaException;
+import com.balieiro.balieiroFoodapi.domain.service.CadastroRestauranteService;
 import com.balieiro.balieiroFoodapi.infraestructure.repository.RestauranteRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,9 +15,14 @@ import java.util.List;
 public class RestauranteController {
 
     private RestauranteRepository restauranteRepository;
-    public RestauranteController(RestauranteRepository restauranteRepository) {
+
+    private CadastroRestauranteService restauranteService;
+
+    public RestauranteController(RestauranteRepository restauranteRepository, CadastroRestauranteService restauranteService) {
         this.restauranteRepository = restauranteRepository;
+        this.restauranteService = restauranteService;
     }
+
     @GetMapping
     public List<Restaurante> listar(){
         return restauranteRepository.listar();
@@ -30,5 +35,17 @@ public class RestauranteController {
             return ResponseEntity.ok(restaurante);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante){
+        try{
+            restaurante = restauranteService.salvar(restaurante);
+
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(restaurante);
+        }catch (EntidadeNaoEncontradaException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
