@@ -4,6 +4,7 @@ import com.balieiro.balieiroFoodapi.domain.entity.Restaurante;
 import com.balieiro.balieiroFoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.balieiro.balieiroFoodapi.domain.service.CadastroRestauranteService;
 import com.balieiro.balieiroFoodapi.infraestructure.repository.RestauranteRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +45,25 @@ public class RestauranteController {
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(restaurante);
+        }catch (EntidadeNaoEncontradaException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{restauranteId}")
+    public ResponseEntity<?> atualizar(@PathVariable Long restauranteId, @RequestBody Restaurante restaurante){
+        try {
+            Restaurante restauranteAtual = restauranteRepository.buscar(restauranteId);
+            if (restauranteAtual != null) {
+                BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
+
+                restauranteAtual = restauranteService.salvar(restauranteAtual);
+
+                return ResponseEntity.ok(restauranteAtual);
+            }
+
+            return ResponseEntity.notFound().build();
+
         }catch (EntidadeNaoEncontradaException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }

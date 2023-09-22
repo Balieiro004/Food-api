@@ -5,6 +5,7 @@ import com.balieiro.balieiroFoodapi.infraestructure.repository.EstadoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +37,12 @@ public class EstadoRepositoryImp implements EstadoRepository {
 
     @Transactional
     @Override
-    public void remover(Estado estado) {
-        estado = buscar(estado.getId());
+    public void remover(Long id) {
+        Estado estado = buscar(id);
+
+        if (estado == null){
+            throw new EmptyResultDataAccessException(1);
+        }
         manager.remove(estado);
     }
 }
