@@ -1,13 +1,8 @@
 package com.balieiro.balieiroFoodapi.infraestructure.repository;
 
 import com.balieiro.balieiroFoodapi.domain.entity.Permissao;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface PermissaoRepository extends JpaRepository<Permissao, Long> {
 
-public interface PermissaoRepository {
-
-    List<Permissao> listar();
-    Permissao buscar(Long id);
-    Permissao salvar(Permissao permissao);
-    void remover(Permissao permissao);
 }

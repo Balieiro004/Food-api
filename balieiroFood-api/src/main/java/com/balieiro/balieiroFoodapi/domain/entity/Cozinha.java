@@ -1,6 +1,5 @@
 package com.balieiro.balieiroFoodapi.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
