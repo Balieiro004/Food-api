@@ -43,6 +43,10 @@ public class RestauranteController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/por-nome")
+    public List<Restaurante> contultaPorNome(String nome, Long cozinhaId){
+        return restauranteRepository.contultaPorNome(nome, cozinhaId);
+    }
     @PostMapping
     public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante){
         try{
@@ -60,7 +64,7 @@ public class RestauranteController {
         Optional<Restaurante> restauranteAtual = restauranteRepository.findById(restauranteId);
         try {
             if (restauranteAtual.isPresent()) {
-                BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
+                BeanUtils.copyProperties(restaurante, restauranteAtual.get(), "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
 
                 Restaurante restauranteSalva = restauranteService.salvar(restauranteAtual.get());
 
@@ -99,4 +103,5 @@ public class RestauranteController {
             ReflectionUtils.setField(field, restauranteDestino, novoValor);
         });
     }
+
 }
